@@ -1,0 +1,21 @@
+T1: Park
+
+Load ParkingLot
+Select Spot
+Allocate 
+Create Ticket
+
+---
+T2: Unpark
+
+Find Active Ticket
+Calculate Fee
+Release Allocation
+Close Ticket
+Persist
+
+---
+T3: Reservation
+
+Create Reservation
+Save ParkingLot
