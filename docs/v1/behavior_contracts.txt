@@ -55,6 +55,7 @@ ParkingLot API
   ) : Ticket
 
   + createReservation(
+      ReservationId,
       RegistrationNumber,
       VehicleType
   ) : Reservation
@@ -78,6 +79,7 @@ ParkingLot API
 ---
 ParkingSpot API
   + allocate(
+      AllocationId,
       RegistrationNumber,
       VehicleType,
       TicketId
