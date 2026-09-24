@@ -1,0 +1,126 @@
+Allocation ranking
+1. Empty non-reserved spot
+2. Partially occupied compatible spot
+3. Reserved spot owned by arriving vehicle
+4. Reserved spot owned by someone else
+
+ParkingLot
+  Floors
+    ParkingSpots
+
+Vehicle
+
+Reservation
+
+Allocation
+
+Ticket
+
+SpotSelectionPolicy
+
+FreeCalculationStrategy
+
+---
+Invariants:
+1. Vehicle can only have one active ticket.
+2. Spot capacity cannot be exceeded.
+3. Reservation must release capacity.
+4. Unparking must release capacity.
+5. Ticket status transition: ACTIVE -> CLOSED
+===========
+
+Domain Entities
+1. ParkingLog
+2. Floor
+3. ParkingSpot
+4. Vehicle
+5. Ticket
+6. Reservation
+7. Allocation
+
+Domain Policies
+1. SpotSelectionPolicy
+2. FeeCalculationStrategy
+
+Repositories
+1. ParkingLotRepository
+2. TicketRepository
+
+Class Diagram
+
+ParkingLog
+  List<Floor>
+  Map<TicketId, Ticket> activeTickets
+  Map<ReservationId, Reservation> reservations
+
+  park()
+  unpark()
+  reserve()
+  findVehicle()
+
+Floor
+  floorId
+  List<ParkingSpot>
+
+ParkingSpot
+  spotId
+  SpotType
+  capacity
+  List<Allocation>
+
+  remainingCapacity()
+  canAccommodate()
+  addAllocation()
+  removeAllocation()
+
+Vehicle
+  registrationNumber
+  VehicleType (CAR, BIKE)
+
+Allocation
+  allocationId
+  vehicle
+  ticketId
+  allocatedAt
+  capacityConsumed
+
+Ticket
+  ticketId
+  vehicle
+  spotId
+  entryTime
+  exitTime
+  fee
+  TicketStatus (ACTIVE, CLOSED)
+
+Reservation
+  reservationId
+  registrationNumber
+  preferredSpotId
+  createdAt
+  ReservationStatus (ACTIVE, CLOSED)
+
+
+SpotSelectionPolicy (ReservationAwarePolicy, NearestSpotPolicy, LeastOccupiedFloorPolicy)
+  Optional<ParkingSpot> selectSpot(vehicle, candidateSpots, reservations)
+
+FeeCalculationStrategy (ProratedFeeStrategy)
+  calculate(ticket, exitTime)
+Eg: 
+Car = 20/hr
+70 mins
+
+20 * (70/60)
+= 23.33 ~= 23
+
+Capacity Units
+Bike requires 1 unit
+Car requires 2 units
+
+AnalyticsService
+  occupancy()
+  revenue()
+  vehicleCount()
+  floorUtilization()
+
+  
