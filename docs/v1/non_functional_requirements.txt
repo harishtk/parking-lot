@@ -1,0 +1,5 @@
+1. Not Distributed
+2. Single process
+3. In-memory first
+4. Persistence abstraction for future SQLite
+5. Thread safety can be ignored initially
