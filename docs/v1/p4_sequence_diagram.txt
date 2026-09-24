@@ -1,0 +1,36 @@
+1. Park Vehicle
+
+CLI 
+ \/
+ParkingService.load()
+  \/
+ParkingLotRepository
+  \/
+ParkingLot
+
+ParkingService.selectSpot()
+  \/
+SpotSelectionPolicy
+  \/
+SpotId
+
+ParkingService.allocate()
+  \/
+ParkingLot
+  | 
+  |- create Allocation
+  |- create Ticket 
+  |- update ActiveTickets
+  |- update VehicleIndex
+  \/
+Updated ParkingLot
+
+ParkingService.save()
+  \/
+ParkingLotRepository
+
+ParkingService
+  \/
+TicketDto
+
+---
