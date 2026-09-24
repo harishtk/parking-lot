@@ -2,29 +2,48 @@ Picocli Architecture
 
 cli 
   - CreateParkingLotCommand
-  - ParkVehicleCommand
-  - UnparkVehicleCommand
+  - ParkCommand
+  - UnparkCommand
   - ReserveSpotCommand
   - FindVehicleCommand
   - StatusCommand
   - AnalyticsCommand
 
 application 
-  - ParkingService
-  - ReservationService
-  - AnalyticsService
+  service
+    - ParkingService
+    - ReservationService
+    - AnalyticsService
+  dto
 
 domain
   model
+    - ParkingLot
+    - Floor
+    - ParkingSpot
+    - Allocation
+    - Ticket
+    - Reservation
+  valueobject
+    - TicketId
+    - SpotId
+    - FloorId
+    - ReservationId
+    - AllocationId
+    - RegistrationNumber
   policy
+    - SpotSelectionPolicy
+    - FeeCalculationStrategy
   repository
+    - ParkingLotRepository
+    - TicketRepository
 
 infrastructure
   persistence
     - memory
-        Repositories
     - sqlite
-        Repositories
+
+bootstrap
 
 CLI 
   \/
