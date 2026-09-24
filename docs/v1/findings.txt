@@ -46,10 +46,11 @@ Repositories
 
 Class Diagram
 
-ParkingLog
-  List<Floor>
+ParkingLot
+  Map<FloorId, Floor> floors,
   Map<TicketId, Ticket> activeTickets
   Map<ReservationId, Reservation> reservations
+  Map<RegistrationNumber, TicketId> vehicleTicketIndex;
 
   park()
   unpark()
@@ -58,13 +59,13 @@ ParkingLog
 
 Floor
   floorId
-  List<ParkingSpot>
+  Map<SpotId, ParkingSpot> spots,
 
 ParkingSpot
   spotId
   SpotType
   capacity
-  List<Allocation>
+  Map<AllocationId, Allocation> allocations;
 
   remainingCapacity()
   canAccommodate()
@@ -92,13 +93,25 @@ Ticket
 Reservation
   reservationId
   registrationNumber
-  preferredSpotId
+  vehicleType
   createdAt
   ReservationStatus (ACTIVE, CLOSED)
 
 
 SpotSelectionPolicy (ReservationAwarePolicy, NearestSpotPolicy, LeastOccupiedFloorPolicy)
-  Optional<ParkingSpot> selectSpot(vehicle, candidateSpots, reservations)
+  Optional<ParkingSpot> selectSpot(
+      vehicleType, 
+      registrationNumber, 
+      candidateSpots, 
+      reservations
+  ) {
+    // Evalaute spot
+    // Compute score
+    // Reserved user bonus
+    // Least occupied floor bonus
+    // Nearest entrance bonus
+    // vip bonus
+  }
 
 FeeCalculationStrategy (ProratedFeeStrategy)
   calculate(ticket, exitTime)
