@@ -37,11 +37,19 @@ domain
   repository
     - ParkingLotRepository
     - TicketRepository
+  ports
+    - IdGenerator<T>
+        T next();
+    - TicketIdGenerator
+    - AllocationIdGenerator
+    - ReservationIdGenerator
 
 infrastructure
   persistence
     - memory
     - sqlite
+  config 
+    - clock
 
 bootstrap
 
