@@ -1,0 +1,24 @@
+1. Create Parking Lot
+2. Multiple Floors
+3. Multiple Spot Types
+    - Car Spot
+    - Bike Spot
+4. Park Vehicle
+    - Allocate suitable spot
+    - Generate ticket
+5. Unpark vehicle
+    - Release spot
+    - Calculate fee (hourly)
+6. Reserve Spot
+    - Against registration number
+    - Reservation expired 
+7. Search
+  - Find vehicle
+  - Find spot
+8. Parking Status
+9. Analytics
+    - Occupancy
+    - Revenue
+    - Vehicle count
+    - Floor-wise utilization
+  
