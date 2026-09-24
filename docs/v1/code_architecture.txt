@@ -38,17 +38,13 @@ domain
   repository
     - ParkingLotRepository
     - TicketRepository
-  ports
-    - IdGenerator<T>
-        T next();
-    - TicketIdGenerator
-    - AllocationIdGenerator
-    - ReservationIdGenerator
+  exception
 
 infrastructure
   persistence
     - memory
     - sqlite
+    - idgenerator
   config 
     - clock
 
