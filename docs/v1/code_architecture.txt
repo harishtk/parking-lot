@@ -1,0 +1,34 @@
+Picocli Architecture
+
+cli 
+  - CreateParkingLotCommand
+  - ParkVehicleCommand
+  - UnparkVehicleCommand
+  - ReserveSpotCommand
+  - FindVehicleCommand
+  - StatusCommand
+  - AnalyticsCommand
+
+application 
+  - ParkingLotService
+  - AnalyticsService
+
+domain
+  model
+  policy
+  repository
+
+infrastructure
+  persistence
+    - memory
+    - sqlite
+
+CLI 
+  \/
+Application Services
+  \/
+Domain
+  \/
+Repositories (Ports)
+  \/
+Infrastructure (Adapters)
