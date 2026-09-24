@@ -18,7 +18,7 @@ application
 
 domain
   model
-    - ParkingLot
+    - ParkingLot (Aggregate Root)
     - Floor
     - ParkingSpot
     - Allocation
@@ -31,6 +31,7 @@ domain
     - ReservationId
     - AllocationId
     - RegistrationNumber
+    - Money
   policy
     - SpotSelectionPolicy
     - FeeCalculationStrategy
