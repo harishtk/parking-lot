@@ -1,0 +1,36 @@
+For every command:
+
+Input
+Preconditions
+Flow
+State Changes
+Failures
+Output
+
+----
+1. Park Vehicle
+
+Input
+  RegistrationNumber
+  VehicleType
+
+Preconditions
+  Vehicle is not already parked
+  Parking lot has available capacity
+
+Flow
+  ParkingService -> SpotSelectionPolicy -> Select spot -> ParkingLot.allocate() - Create Allocation ->
+      Create Ticket -> Store Active
+
+State Changes
+  Spot allocations updated
+  Active ticket added
+  Vehicle index added
+
+Failures
+  Vehicle already parked
+  No suitable spot available
+
+Output
+  TicketId
+  Allocated SpotId
