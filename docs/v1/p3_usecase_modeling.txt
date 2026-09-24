@@ -117,3 +117,15 @@ Output
   C2
 
 ---
+7. Revenue Analytics
+
+Input
+  date range (optional)
+
+Flow
+  TicketRepository -> Closed Tickets -> Aggregate Fee
+
+Output
+  Total Revenue
+
+---
