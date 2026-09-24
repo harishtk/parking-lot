@@ -21,10 +21,12 @@ FreeCalculationStrategy
 
 ---
 Invariants:
-1. Vehicle can only have one active ticket.
+1. A registration number can have at most one active ticket.
 2. Spot capacity cannot be exceeded.
-3. Reservation must release capacity.
-4. Unparking must release capacity.
+3. ACTIVE ticket must correspond to exactly one. 
+4. CLOSED ticket cannot be reopened.
+5. Every allocation belongs to exactly one spot.
+6. Every active parked vehicle must exist in vehicleIndex.
 5. Ticket status transition: ACTIVE -> CLOSED
 ===========
 
