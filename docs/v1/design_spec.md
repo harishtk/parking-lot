@@ -16,13 +16,60 @@ The goal is to create a design that is:
 # 2. Scope
 ## Supported Features
 ### Parking Operations
-```bash
+```
 Park Vehicle
 Unpark Vehicle
 Generate Ticket
 Calculate Fee
 ```
-
+### Multiple Floors
+```
+One ParkingLot
+Multiple Floors
+Multiple Spots per Floor
+```
+### Vehicle Types
+```
+CAR
+BIKE
+```
+### Reservation Support
+```
+Registration number based reservations
+Soft reservations
+Allocation priority eligible
+```
+### Search
+```
+Find Vehicle
+Find Spot
+```
+### Visibility
+```
+Parking Status
+Occupancy Status
+```
+### Analytics
+```
+Revenue
+Vehicle Count
+Occupancy
+Floor Utilization
+```
+---
+# 3. Explicitly Out Of Scope
+## Version 1
+```
+Electric charging stations
+Multiple parking lots
+Distributed deployment
+Concurrency
+Networking
+Authentication
+Authorization
+Billing integrations
+```
+---
 
 
 
