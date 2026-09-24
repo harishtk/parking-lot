@@ -132,4 +132,33 @@ AnalyticsService
   vehicleCount()
   floorUtilization()
 
-  
+----
+Service responsibilites
+
+ParkingService
+    park()
+    unpark()
+    findVehicle()
+    status()
+  depends:
+    ParkingLotRepository
+    TicketRepository
+    SpotSelectionRepository
+    FeeCalculationStratgey
+
+ReservationService
+    reserve()
+    cancel()
+    getReservation()
+    listReservations()
+  depends:
+    ParkingLotRepository
+
+AnalyticsService
+    revenue()
+    occupancy()
+    vehicleCount()
+    floorUtilization()
+  depends:
+    TicketRepository
+    ParkingLotRepository
