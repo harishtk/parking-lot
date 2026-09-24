@@ -81,3 +81,20 @@ ParkingLotRepository
 ParkingService
  \/
 Receipt
+
+---
+3. Reserve Vehicle
+
+CLI
+ \/
+ReservationService.load()
+ \/
+ParkingLotRepository
+
+ReservationService.reserve()
+ \/
+ParkingLot.create reservation
+ \/
+Updated ParkingLot
+
+ReservationService.save()
