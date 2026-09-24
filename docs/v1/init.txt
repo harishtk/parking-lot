@@ -1,0 +1,25 @@
+Design process:
+
+Requirements
+  \/
+Domain Discovery
+  \/
+Aggregate Boundaries
+  \/
+Responsibilities
+  \/
+Policies
+  \/
+Repositories
+  \/
+Services
+  \/
+Sequence Flows
+  \/
+Transaction Boundaries
+  \/
+Dependency Validation
+  \/
+UML
+  \/ 
+Implementation
