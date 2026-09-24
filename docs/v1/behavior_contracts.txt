@@ -1,0 +1,41 @@
+ParkingLot Behavior
+  + allocate()
+  + release()
+  + createReservation()
+  + cancelReservation()
+  + hasActiveTicket()
+  + findActiveTicket()
+  + findReservation()
+  + findSpot()
+  + availableSpots()
+
+Floor Behavior
+  + findSpot(SpotId)
+  + spots()
+
+ParkingSpot Behavior
+  + addAllocation()
+  + removeAllocation()
+  + remainingCapacity() 
+  + canAccommodate()
+  + isEmpty()
+  + isFull()
+  + allocations()
+
+Allocation Behavior
+  + consumesCapacity()
+  + belongsTo(TicketId)
+
+Ticket Behavior
+  + close()
+  + isActive()
+
+Reservation Behavior
+  + cancel()
+  + isActive()
+  + belongsTo()
+
+======================================
+Refined Aggregate API
+// TODO: 
+
