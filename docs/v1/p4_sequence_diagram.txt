@@ -34,3 +34,50 @@ ParkingService
 TicketDto
 
 ---
+2. Unpark Vehicle
+
+CLI
+ \/
+ParkingService.load()
+ \/
+ParkingLotRepository
+
+ParkingService
+ |
+ |- find active Ticket
+ \/
+ParkingLot
+
+ParkingService
+ |
+ |- calculate()
+ \/
+FeeCalculationStrategy
+ \/
+Money
+
+ParkingService.release()
+ \/
+ParkingLot
+ |
+ |- remove Allocation
+ |- remove Active Ticket
+ |- remove Vehicle Index
+ \/
+Closed Ticket
+
+ParkingService
+ |
+ |- save ticket
+ \/
+TicketRepository
+
+ParkingService 
+ |
+ |- save parking lot
+ \/
+ParkingLotRepository
+
+ParkingService
+ \/
+Receipt
