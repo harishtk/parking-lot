@@ -10,7 +10,8 @@ cli
   - AnalyticsCommand
 
 application 
-  - ParkingLotService
+  - ParkingService
+  - ReservationService
   - AnalyticsService
 
 domain
@@ -21,7 +22,9 @@ domain
 infrastructure
   persistence
     - memory
+        Repositories
     - sqlite
+        Repositories
 
 CLI 
   \/
