@@ -63,3 +63,57 @@ Output
   Duration
   Spot released
 
+---
+3. Reserve Vehicle
+
+Input
+  RegistrationNumber
+  VehicleType
+
+Preconditions
+  Reservation doesn't already exist
+
+Flow
+  Create reservation -> Store reservation
+
+State Changes
+  Reservation map updated
+
+Output
+  ReservationId
+
+---
+4. Cancel Reservation
+
+Input 
+  ReservationId
+
+State Changes
+  Reservation removed
+
+---
+5. Find Vehicle
+
+Input
+  RegistrationNumber
+
+Flow
+  vehicleIndex -> ticketId -> activeTicket -> spot
+
+Output
+  SpotId
+  FloorId
+  TicketId
+
+---
+6. Parking Status
+
+Output
+  Floor 1
+  B1 OCCUPIED
+  B2 FREE
+
+  C1 1/2 OCCUPIED
+  C2
+
+---
