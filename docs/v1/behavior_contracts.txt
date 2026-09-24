@@ -37,5 +37,81 @@ Reservation Behavior
 
 ======================================
 Refined Aggregate API
-// TODO: 
 
+ParkingLot API
+  + allocate(
+      RegistrationNumber,
+      VehicleType,
+      SpotId,   
+      Instant
+  ) : Ticket
+
+  + release(
+      TicketId,
+      Money,
+      Instant
+  ) : Ticket
+
+  + createReservation(
+      RegistrationNumber,
+      VehicleType
+  ) : Reservation
+
+  + cancelReservation(
+      ReservationId
+  )
+
+  + hasActiveTicket(
+      RegistrationNumber
+  ) : boolean
+
+  + findActiveTicket(
+      TicketId
+  ) : Ticket
+
+  + findSpot(
+      SpotId
+  ) : ParkingSpot
+
+---
+ParkingSpot API
+  + allocate(
+      RegistrationNumber,
+      VehicleType,
+      TicketId
+  ) : Allocation
+
+  + release(
+      TicketId
+  ) : Allocation
+
+  + canAccommodate(
+      VehicleType
+  ) : boolean
+
+  + remainingCapacity() : int
+
+  + isFull() : boolean
+
+  + isEmpty() : boolean
+
+---
+Ticket API
+  + close(
+      Instant exitTime,
+      Money fee
+  )
+
+  + isActive() : boolean
+
+  + isClosed() : boolean
+
+  + duration() : Duration
+
+---
+Reservation API 
+  + cancel()
+
+  + isActive() : boolean
+
+  + belongsTo() : boolean
