@@ -40,6 +40,8 @@ Refined Aggregate API
 
 ParkingLot API
   + allocate(
+      TicketId ticketId,
+      AllocationId allocationId,
       RegistrationNumber,
       VehicleType,
       SpotId,   
