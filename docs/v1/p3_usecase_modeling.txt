@@ -34,3 +34,32 @@ Failures
 Output
   TicketId
   Allocated SpotId
+
+---
+2. Unpark Vehicle
+
+Input 
+  TicketId
+
+Preconditions
+  Ticket exists
+  Ticket is ACTIVE
+
+Flow
+  Find active ticket -> Determine allocation -> Calculate fee -> Release allocation -> Close ticket -> Persist historical ticket
+
+State Changse
+  Allocation removed
+  Ticket removed from active tickets
+  Ticket saved to repository
+  Vehicle index removed
+
+Failures
+  Unknown ticket
+  Already closed ticket
+
+Output
+  Fee
+  Duration
+  Spot released
+
