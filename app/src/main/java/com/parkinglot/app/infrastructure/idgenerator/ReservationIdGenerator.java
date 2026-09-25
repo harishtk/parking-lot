@@ -1,13 +1,14 @@
 package com.parkinglot.app.infrastructure.idgenerator;
 
 import com.parkinglot.app.domain.IdGenerator;
+import com.parkinglot.app.domain.valueobject.ReservationId;
 
 import java.time.Instant;
 
-public record ReservationIdGenerator(String prefix) implements IdGenerator<String, String> {
+public record ReservationIdGenerator(String prefix) implements IdGenerator<ReservationId, String> {
 
     @Override
-    public String next(String input) {
-        return "%s-%s-%s".formatted(prefix, input, Instant.now().toString());
+    public ReservationId next(String input) {
+        return new ReservationId("%s-%s-%s".formatted(prefix, input, Instant.now().toString()));
     }
 }

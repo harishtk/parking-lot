@@ -85,5 +85,27 @@ public class ParkingSpot {
     public SpotType spotType() {
         return spotType;
     }
+
+    public static ParkingSpot carSpot(
+            SpotId spotId
+    ) {
+        return new ParkingSpot(
+                spotId,
+                SpotType.CAR,
+                1,
+                Map.of()
+        );
+    }
+
+    public static ParkingSpot bikeSpot(
+            SpotId spotId
+    ) {
+        return new ParkingSpot(
+                spotId,
+                SpotType.BIKE,
+                1,
+                Map.of()
+        );
+    }
 }
 

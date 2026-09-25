@@ -6,6 +6,7 @@ import com.parkinglot.app.domain.exception.TicketNotFoundException;
 import com.parkinglot.app.domain.valueobject.*;
 
 import java.time.Instant;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -27,6 +28,10 @@ public class ParkingLot {
         this.tickets = tickets;
         this.reservations = reservations;
         this.vehicleTicketIndex = vehicleTicketIndex;
+    }
+
+    private ParkingLot(Map<FloorId, Floor> floors) {
+        this(floors, new HashMap<>(), new HashMap<>(), new HashMap<>());
     }
 
     public Ticket allocate(
@@ -111,6 +116,11 @@ public class ParkingLot {
         return cancelled;
     }
 
+    public Reservation findReservation(ReservationId reservationId) {
+        return Optional.ofNullable(reservations.get(reservationId))
+                .orElseThrow(() -> new ReservationNotFoundException(reservationId));
+    }
+
     public ParkingSpot findSpot(SpotId spotId) {
         for (Floor floor : floors.values()) {
             Optional<ParkingSpot> parkingSpot = floor.findSpot(spotId);
@@ -131,6 +141,50 @@ public class ParkingLot {
         return Optional.ofNullable(tickets.get(ticketId))
                 .orElseThrow(() ->
                         new TicketNotFoundException(ticketId));
+    }
+
+    public static ParkingLot create(
+            int floorCount,
+            int carSpotsPerFloor,
+            int bikeSpotsPerFloor
+    ) {
+        Map<FloorId, Floor> floors = new HashMap<>();
+
+        for (int floorNumber = 1; floorNumber <= floorCount; floorNumber++) {
+
+            Floor floor = Floor.create(
+                    floorNumber,
+                    carSpotsPerFloor,
+                    bikeSpotsPerFloor
+            );
+
+            floors.put(floor.id(), floor);
+        }
+
+        return new ParkingLot(floors);
+    }
+
+    private static void validate(
+            int floorCount,
+            int carSpotsPerFloor,
+            int bikeSpotsPerFloor
+    ) {
+        if (floorCount <= 0) {
+            throw new IllegalArgumentException("At least one floor is required");
+        }
+
+        if (carSpotsPerFloor < 0) {
+            throw new IllegalArgumentException("Car spots cannot be negative");
+        }
+
+        if (bikeSpotsPerFloor < 0) {
+            throw new IllegalArgumentException("Bike spots cannot be negative");
+        }
+
+        if (carSpotsPerFloor == 0
+            && bikeSpotsPerFloor == 0) {
+            throw new IllegalArgumentException("Parking lot must contain at least one parking spot");
+        }
     }
 
 }

@@ -20,6 +20,7 @@ dependencies {
     // This dependency is used by the application.
     implementation(libs.guava)
     implementation(libs.guice)
+    implementation(libs.jackson)
 
     implementation(libs.picocli)
     annotationProcessor(libs.picocli.codegen)
