@@ -2,6 +2,7 @@ package com.parkinglot.app.cli;
 
 import com.google.inject.Inject;
 import com.parkinglot.app.application.service.ParkingService;
+import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 
@@ -9,29 +10,43 @@ import java.util.concurrent.Callable;
 
 @Command(
         name = "create-lot",
-        description = "Creates a parking lot"
+        description = "Creates a parking lot",
+        mixinStandardHelpOptions = true,
+        sortOptions = false,
+        exitCodeOnInvalidInput = 2,
+        exitCodeOnExecutionException = 1
 )
 public class CreateParkingLotCommand implements Callable<Integer> {
 
     @Option(
             names = {"--car-spots-per-floor"},
             description = "Car spots per floor",
-            defaultValue = "1"
+            defaultValue = "1",
+            showDefaultValue = CommandLine.Help.Visibility.ON_DEMAND,
+            paramLabel = "COUNT"
     )
     private int carSpotsPerFloor;
 
     @Option(
             names = {"--bike-spots-per-floor"},
             description = "Bike spots per floor",
-            defaultValue = "1"
+            defaultValue = "1",
+            showDefaultValue = CommandLine.Help.Visibility.ON_DEMAND,
+            paramLabel = "COUNT"
     )
     private int bikeSpotsPerFloor;
 
     @Option(
             names = {"--floors", "-f"},
             description = "The number of floors for parking lot.",
-            defaultValue = "1")
+            defaultValue = "1",
+            showDefaultValue = CommandLine.Help.Visibility.ON_DEMAND,
+            paramLabel = "COUNT"
+    )
     private int numFloors;
+
+    @CommandLine.Spec
+    private CommandLine.Model.CommandSpec spec;
 
     private final ParkingService parkingService;
 

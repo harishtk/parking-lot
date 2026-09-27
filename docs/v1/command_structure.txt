@@ -1,0 +1,10 @@
+parking --help
+parking --version
+parking help park
+
+parking create-lot --floors 2 --car-spots-per-floor 10 --bike-spots-per-floor 5
+parking park --registration KA05AB1234 --type car
+parking unpark --registration KA05AB1234
+parking find-vehicle --registration KA05AB1234
+parking reserve --registration KA05AB1234 --type bike
+parking delete-lot

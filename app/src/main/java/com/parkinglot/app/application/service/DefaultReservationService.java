@@ -11,18 +11,16 @@ import com.parkinglot.app.infrastructure.idgenerator.ReservationIdGenerator;
 
 public class DefaultReservationService implements ReservationService {
 
-    private final ReservationIdGenerator idGenerator;
+    private final ParkingLotRepository parkingLotRepository;
 
-    private final ParkingLot parkingLot;
+    private final ReservationIdGenerator idGenerator;
 
     @Inject
     public DefaultReservationService(
             ParkingLotRepository parkingLotRepository,
             ReservationIdGenerator idGenerator
     ) {
-
-        this.parkingLot = parkingLotRepository.load()
-                .orElseThrow(() -> new RuntimeException("Unable to load parking lot"));
+        this.parkingLotRepository = parkingLotRepository;
         this.idGenerator = idGenerator;
     }
 
@@ -30,18 +28,28 @@ public class DefaultReservationService implements ReservationService {
             RegistrationNumber registrationNumber,
             VehicleType vehicleType
     ) {
-        return parkingLot.createReservation(
+        ParkingLot parkingLot = parkingLotRepository.load()
+                .orElseThrow(() -> new RuntimeException("Unable to load parking lot"));
+
+        Reservation reservation = parkingLot.createReservation(
                 idGenerator.next(registrationNumber.value()),
                 registrationNumber,
                 vehicleType
         );
+
+        parkingLotRepository.save(parkingLot);
+        return reservation;
     }
 
     public Reservation cancel(ReservationId reservationId) {
+        ParkingLot parkingLot = parkingLotRepository.load()
+                .orElseThrow(() -> new RuntimeException("Unable to load parking lot"));
         return parkingLot.cancelReservation(reservationId);
     }
 
     public Reservation getReservationById(ReservationId reservationId) {
+        ParkingLot parkingLot = parkingLotRepository.load()
+                .orElseThrow(() -> new RuntimeException("Unable to load parking lot"));
         return parkingLot.findReservation(reservationId);
     }
 }

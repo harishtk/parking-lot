@@ -41,10 +41,7 @@ public class Ticket {
         this.entryTime = entryTime;
     }
 
-    public Ticket close(
-            Instant exitTime,
-            Money fee
-    ) {
+    public Ticket close(Instant exitTime, Money fee) {
         if (this.status == TicketStatus.CLOSED) {
             return this;
         }
@@ -60,6 +57,10 @@ public class Ticket {
 
     public boolean belongsTo(RegistrationNumber registrationNumber) {
         return this.registrationNumber.equals(registrationNumber);
+    }
+
+    public Duration elapsedDuration(Instant exitTime) {
+        return Duration.between(this.entryTime, exitTime);
     }
 
     public Duration duration() {

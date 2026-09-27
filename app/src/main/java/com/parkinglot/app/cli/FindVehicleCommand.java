@@ -2,23 +2,36 @@ package com.parkinglot.app.cli;
 
 import com.google.inject.Inject;
 import com.parkinglot.app.application.service.ParkingService;
-import com.parkinglot.app.domain.model.Ticket;
+import com.parkinglot.app.cli.converter.RegistrationNumberConverter;
+import com.parkinglot.app.cli.io.ParkingOutput;
 import com.parkinglot.app.domain.valueobject.RegistrationNumber;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 
-import java.util.Optional;
 import java.util.concurrent.Callable;
 
 @Command(
-        name = "find",
-        description = "Find vehicle"
+        name = "find-vehicle",
+        aliases = {"find"},
+        description = "Find vehicle",
+        mixinStandardHelpOptions = true,
+        sortOptions = false,
+        exitCodeOnInvalidInput = 2,
+        exitCodeOnExecutionException = 1
 )
 public class FindVehicleCommand implements Callable<Integer> {
 
-    @Option(names = {"-v", "--vehicle"}, description = "Vehicle Registration Number", required = true)
-    private String vehicleNumber;
+    @Option(names = {"-v", "--vehicle", "-r", "--registration"},
+            required = true,
+            paramLabel = "REGISTRATION",
+            converter = RegistrationNumberConverter.class,
+            description = "Vehicle registration, for example KA05AB1234"
+    )
+    private RegistrationNumber registrationNumber;
+
+    @CommandLine.Spec
+    private CommandLine.Model.CommandSpec spec;
 
     private final ParkingService parkingService;
 
@@ -29,13 +42,16 @@ public class FindVehicleCommand implements Callable<Integer> {
 
     @Override
     public Integer call() throws Exception {
-        RegistrationNumber registrationNumber = new RegistrationNumber(vehicleNumber);
-
+        var out = spec.commandLine().getOut();
         parkingService.findVehicle(registrationNumber)
                 .ifPresentOrElse(ticket -> {
-                            System.out.println("Vehicle found: " + ticket);
+                            out.println(CommandLine.Help.Ansi.AUTO.string("@|bold,green Vehicle parked successfully|@"));
+                            ParkingOutput.printTicket(spec, ticket);
                         },
-                        () -> System.out.println("Vehicle not found")
+                        () -> {
+                            String message = "ERROR VEHICLE_NOT_FOUND: Vehicle not found for registration: " + registrationNumber.value();
+                            ParkingOutput.printErr(spec, message);
+                        }
                 );
 
         return 0;

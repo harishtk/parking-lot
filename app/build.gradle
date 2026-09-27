@@ -20,6 +20,8 @@ dependencies {
     implementation(libs.jackson)
     implementation(libs.jackson.jsr310)
 
+    implementation("com.github.freva:ascii-table:1.13.0")
+
     implementation(libs.picocli)
     annotationProcessor(libs.picocli.codegen)
 

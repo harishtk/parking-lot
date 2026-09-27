@@ -1,6 +1,5 @@
 package com.parkinglot.app.domain.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.parkinglot.app.domain.exception.AllocationNotFoundException;
 import com.parkinglot.app.domain.valueobject.AllocationId;
 import com.parkinglot.app.domain.valueobject.SpotId;

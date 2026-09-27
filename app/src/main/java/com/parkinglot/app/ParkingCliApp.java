@@ -10,21 +10,43 @@ import com.parkinglot.app.exception.PrintExceptionMessageHandler;
 import com.parkinglot.app.exception.ShortErrorMessageHandler;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
+import picocli.CommandLine.Model.CommandSpec;
 
 @Command(
         name = "parking",
+        description = "Manage a parking lot, vehicles and reservations.",
         mixinStandardHelpOptions = true,
         version = "parking 1.0",
-        description = "Parking Lot Application",
+        synopsisSubcommandLabel = "COMMAND",
+        commandListHeading = "%ncommands:%n",
+        optionListHeading = "%noptions:%n",
+        footer = "%nRun 'parking help COMMAND' for command details.",
+        exitCodeListHeading = "%nExit codes:%n",
+        exitCodeList = {
+                "0:Successful operation or help",
+                "1:Internal or Storage failure",
+                "2:Invalid command or input",
+                "3:Operation rejected by a business rule"
+        },
         subcommands = {
                 CreateParkingLotCommand.class,
                 ReserveSpotCommand.class,
                 FindVehicleCommand.class,
                 ParkVehicleCommand.class,
-                DeleteParkingLotCommand.class
+                UnparkVehicleCommand.class,
+                DeleteParkingLotCommand.class,
+                ParkingStatusCommand.class
         }
 )
-public class ParkingCliApp {
+public class ParkingCliApp implements Runnable {
+
+    @CommandLine.Spec
+    private CommandSpec spec;
+
+    @Override
+    public void run() {
+        spec.commandLine().usage(spec.commandLine().getOut());
+    }
 
     public static void main(String[] args) {
         Injector injector = Guice.createInjector(
@@ -32,14 +54,14 @@ public class ParkingCliApp {
                 new ApplicationModule()
         );
 
-        int exitCode = new CommandLine(
+        CommandLine cli = new CommandLine(
                 injector.getInstance(ParkingCliApp.class),
                 new GuiceFactory(injector)
         )
+                .setCaseInsensitiveEnumValuesAllowed(true)
                 .setParameterExceptionHandler(new ShortErrorMessageHandler())
-                .setExecutionExceptionHandler(new PrintExceptionMessageHandler())
-                .execute(args);
+                .setExecutionExceptionHandler(new PrintExceptionMessageHandler());
 
-        System.exit(exitCode);
+        System.exit(cli.execute(args));
     }
 }

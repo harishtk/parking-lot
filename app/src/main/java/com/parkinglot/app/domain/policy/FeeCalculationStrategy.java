@@ -16,20 +16,18 @@ public class FeeCalculationStrategy {
     private static final BigDecimal BIKE_PER_HOUR = BigDecimal.valueOf(10);
 
     @Inject
-    public FeeCalculationStrategy() {}
+    public FeeCalculationStrategy() {
+    }
 
-    public Money calculate(Ticket ticket, Instant exitTime) {
-        // Calculate Duration
-        Duration duration = ticket.duration();
-
-        BigDecimal rate = getRateForVehicleType(ticket.vehicleType());
+    public Money calculate(VehicleType vehicleType, Duration elapsedDuration) {
+        BigDecimal rate = getRateForVehicleType(vehicleType);
 
         BigDecimal fee = rate.multiply(
-                BigDecimal.valueOf(duration.toMinutes()).divide(
+                BigDecimal.valueOf(elapsedDuration.toMinutes()).divide(
                         BigDecimal.valueOf(Duration.ofHours(1).toMinutes()),
                         RoundingMode.HALF_DOWN
                 )
-        );
+        ).max(rate);
 
         return new Money(fee);
     }

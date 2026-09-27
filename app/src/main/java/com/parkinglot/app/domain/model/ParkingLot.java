@@ -167,4 +167,23 @@ public final class ParkingLot {
                 .flatMap(this::findActiveTicket);
     }
 
+    public ParkingLotMetaData describe() {
+        int numFloors = floors.size();
+        int numSpots = findCandidateSpots().size();
+        int numTickets = tickets.size();
+        int numReservations = reservations.size();
+        long numOccupiedSpots = Math.toIntExact(floors.values().stream()
+                .map(Floor::spots)
+                .flatMap(List::stream)
+                .filter(spot -> !spot.isEmpty())
+                .count());
+
+        return new  ParkingLotMetaData(
+                numFloors,
+                numSpots,
+                numTickets,
+                numReservations,
+                numOccupiedSpots
+        );
+    }
 }

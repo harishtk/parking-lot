@@ -2,9 +2,11 @@ package com.parkinglot.app.cli;
 
 import com.google.inject.Inject;
 import com.parkinglot.app.application.service.ReservationService;
+import com.parkinglot.app.cli.converter.RegistrationNumberConverter;
 import com.parkinglot.app.domain.model.Reservation;
 import com.parkinglot.app.domain.model.VehicleType;
 import com.parkinglot.app.domain.valueobject.RegistrationNumber;
+import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 
@@ -12,15 +14,31 @@ import java.util.concurrent.Callable;
 
 @Command(
         name = "reserve",
-        description = "Reserves a spot for given vehicle registration number"
+        description = "Reserves a spot for given vehicle registration number, not guaranteed",
+        mixinStandardHelpOptions = true,
+        sortOptions = false,
+        exitCodeOnInvalidInput = 2,
+        exitCodeOnExecutionException = 1
 )
 public class ReserveSpotCommand implements Callable<Integer> {
 
-    @Option(names = {"-v", "--vehicle"}, description = "Vehicle registration number", required = true)
-    private String vehicleNumber;
+    @Option(names = {"-v", "--vehicle", "-r", "--registration"},
+            required = true,
+            paramLabel = "REGISTRATION",
+            converter = RegistrationNumberConverter.class,
+            description = "Vehicle registration, for example KA05AB1234"
+    )
+    private RegistrationNumber registrationNumber;
 
-    @Option(names = {"-t", "--type"}, description = "Vehicle type (car, bike)", required = true)
-    private String vehicleType;
+    @Option(names = {"-t", "--type"},
+            required = true,
+            paramLabel = "TYPE",
+            description = "Vehicle type: ${COMPLETION-CANDIDATES}."
+    )
+    private VehicleType vehicleType;
+
+    @CommandLine.Spec
+    private CommandLine.Model.CommandSpec spec;
 
     private final ReservationService reservationService;
 
@@ -31,15 +49,12 @@ public class ReserveSpotCommand implements Callable<Integer> {
 
     @Override
     public Integer call() throws Exception {
-        RegistrationNumber registrationNumber = new RegistrationNumber(vehicleNumber);
-        VehicleType vehicleType1 = VehicleType.valueOf(vehicleType.toUpperCase());
-
         Reservation reservation = reservationService
                 .reserve(
                         registrationNumber,
-                        vehicleType1
+                        vehicleType
                 );
-        System.out.println("Vehicle reserved: " + reservation.id().value());
+        spec.commandLine().getOut().printf("Vehicle reserved: %s%n", reservation.id().value());
 
         return 0;
     }
