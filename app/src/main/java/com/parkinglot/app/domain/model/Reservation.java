@@ -7,15 +7,18 @@ import java.time.Instant;
 
 public class Reservation {
 
-    private final ReservationId reservationId;
+    private ReservationId reservationId;
 
-    private final RegistrationNumber registrationNumber;
+    private RegistrationNumber registrationNumber;
 
-    private final VehicleType vehicleType;
+    private VehicleType vehicleType;
 
-    private final Instant createdAt;
+    private Instant createdAt;
 
-    private ReservationStatus status;
+    private ReservationStatus status = ReservationStatus.ACTIVE;
+
+    /* Required empty constructor for jackson */
+    public Reservation() {}
 
     public Reservation(ReservationId reservationId,
                        RegistrationNumber registrationNumber,

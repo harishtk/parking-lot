@@ -10,21 +10,24 @@ import java.time.Instant;
 
 public class Ticket {
 
-    private final TicketId ticketId;
+    private TicketId ticketId;
 
-    private final RegistrationNumber registrationNumber;
+    private RegistrationNumber registrationNumber;
 
-    private final VehicleType vehicleType;
+    private VehicleType vehicleType;
 
-    private final SpotId spotId;
+    private SpotId spotId;
 
-    private final Instant entryTime;
+    private Instant entryTime;
 
     private Instant exitTime;
 
     private Money fee;
 
-    private TicketStatus status;
+    private TicketStatus status = TicketStatus.ACTIVE;
+
+    /* Required empty constructor for jackson */
+    public Ticket() {}
 
     public Ticket(TicketId ticketId,
                   RegistrationNumber registrationNumber,
@@ -76,6 +79,20 @@ public class Ticket {
 
     public VehicleType vehicleType() {
         return this.vehicleType;
+    }
+
+    @Override
+    public String toString() {
+        return "Ticket{" +
+                "ticketId=" + ticketId +
+                ", registrationNumber=" + registrationNumber.value() +
+                ", vehicleType=" + vehicleType +
+                ", spotId=" + spotId.id() +
+                ", entryTime=" + entryTime +
+                ", exitTime=" + exitTime +
+                ", fee=" + fee +
+                ", status=" + status +
+                '}';
     }
 }
 

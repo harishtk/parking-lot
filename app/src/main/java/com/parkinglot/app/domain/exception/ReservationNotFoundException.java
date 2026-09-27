@@ -4,6 +4,6 @@ import com.parkinglot.app.domain.valueobject.ReservationId;
 
 public class ReservationNotFoundException extends RuntimeException {
     public ReservationNotFoundException(ReservationId reservationId) {
-        super("Reservation with id " + reservationId + " not found");
+        super("Reservation with value " + reservationId + " not found");
     }
 }

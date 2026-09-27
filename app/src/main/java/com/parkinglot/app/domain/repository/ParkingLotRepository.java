@@ -9,4 +9,6 @@ public interface ParkingLotRepository {
     Optional<ParkingLot> load();
 
     boolean save(ParkingLot parkingLot);
+
+    boolean delete();
 }

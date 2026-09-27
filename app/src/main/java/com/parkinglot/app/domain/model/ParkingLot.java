@@ -7,18 +7,22 @@ import com.parkinglot.app.domain.valueobject.*;
 
 import java.time.Instant;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-public class ParkingLot {
+public final class ParkingLot {
 
-    private final Map<FloorId, Floor> floors;
+    private Map<FloorId, Floor> floors;
 
-    private final Map<TicketId, Ticket> tickets;
+    private Map<TicketId, Ticket> tickets;
 
-    private final Map<ReservationId, Reservation> reservations;
+    private Map<ReservationId, Reservation> reservations;
 
-    private final Map<RegistrationNumber, TicketId> vehicleTicketIndex;
+    private Map<RegistrationNumber, TicketId> vehicleTicketIndex;
+
+    /* Required empty constructor for jackson */
+    public ParkingLot() {}
 
     public ParkingLot(Map<FloorId, Floor> floors,
                       Map<TicketId, Ticket> tickets,
@@ -30,7 +34,11 @@ public class ParkingLot {
         this.vehicleTicketIndex = vehicleTicketIndex;
     }
 
-    private ParkingLot(Map<FloorId, Floor> floors) {
+    public static ParkingLot initialize(Map<FloorId, Floor> floors) {
+        return new ParkingLot(floors);
+    }
+
+    public ParkingLot(Map<FloorId, Floor> floors) {
         this(floors, new HashMap<>(), new HashMap<>(), new HashMap<>());
     }
 
@@ -121,6 +129,19 @@ public class ParkingLot {
                 .orElseThrow(() -> new ReservationNotFoundException(reservationId));
     }
 
+    public List<Reservation> findActiveReservations() {
+        return reservations.values().stream()
+                .filter(Reservation::isActive)
+                .toList();
+    }
+
+    public List<ParkingSpot> findCandidateSpots() {
+        return floors.values().stream()
+                .map(Floor::spots)
+                .flatMap(List::stream)
+                .toList();
+    }
+
     public ParkingSpot findSpot(SpotId spotId) {
         for (Floor floor : floors.values()) {
             Optional<ParkingSpot> parkingSpot = floor.findSpot(spotId);
@@ -137,54 +158,13 @@ public class ParkingLot {
         return tickets.containsKey(ticketId);
     }
 
-    public Ticket findActiveTicket(TicketId ticketId) {
-        return Optional.ofNullable(tickets.get(ticketId))
-                .orElseThrow(() ->
-                        new TicketNotFoundException(ticketId));
+    public Optional<Ticket> findActiveTicket(TicketId ticketId) {
+        return Optional.ofNullable(tickets.get(ticketId));
     }
 
-    public static ParkingLot create(
-            int floorCount,
-            int carSpotsPerFloor,
-            int bikeSpotsPerFloor
-    ) {
-        Map<FloorId, Floor> floors = new HashMap<>();
-
-        for (int floorNumber = 1; floorNumber <= floorCount; floorNumber++) {
-
-            Floor floor = Floor.create(
-                    floorNumber,
-                    carSpotsPerFloor,
-                    bikeSpotsPerFloor
-            );
-
-            floors.put(floor.id(), floor);
-        }
-
-        return new ParkingLot(floors);
-    }
-
-    private static void validate(
-            int floorCount,
-            int carSpotsPerFloor,
-            int bikeSpotsPerFloor
-    ) {
-        if (floorCount <= 0) {
-            throw new IllegalArgumentException("At least one floor is required");
-        }
-
-        if (carSpotsPerFloor < 0) {
-            throw new IllegalArgumentException("Car spots cannot be negative");
-        }
-
-        if (bikeSpotsPerFloor < 0) {
-            throw new IllegalArgumentException("Bike spots cannot be negative");
-        }
-
-        if (carSpotsPerFloor == 0
-            && bikeSpotsPerFloor == 0) {
-            throw new IllegalArgumentException("Parking lot must contain at least one parking spot");
-        }
+    public Optional<Ticket> findVehicle(RegistrationNumber registrationNumber) {
+        return Optional.ofNullable(vehicleTicketIndex.get(registrationNumber))
+                .flatMap(this::findActiveTicket);
     }
 
 }

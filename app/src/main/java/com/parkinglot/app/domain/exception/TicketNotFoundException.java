@@ -4,6 +4,6 @@ import com.parkinglot.app.domain.valueobject.TicketId;
 
 public class TicketNotFoundException extends RuntimeException {
     public TicketNotFoundException(TicketId ticketId) {
-        super("Ticket with id " + ticketId + " not found");
+        super("Ticket with value " + ticketId + " not found");
     }
 }

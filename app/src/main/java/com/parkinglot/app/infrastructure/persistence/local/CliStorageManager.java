@@ -2,6 +2,7 @@ package com.parkinglot.app.infrastructure.persistence.local;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
@@ -19,8 +20,13 @@ public class CliStorageManager {
         ensureDirectoryExists();
 
         this.objectMapper = new ObjectMapper()
+                .findAndRegisterModules()
                 .enable(SerializationFeature.INDENT_OUTPUT)
-                .setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+                .setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY)
+                .setVisibility(PropertyAccessor.GETTER, JsonAutoDetect.Visibility.NONE)
+                .setVisibility(PropertyAccessor.IS_GETTER, JsonAutoDetect.Visibility.NONE)
+                .setVisibility(PropertyAccessor.SETTER, JsonAutoDetect.Visibility.NONE)
+                .configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, false);
     }
 
     private void ensureDirectoryExists() {
@@ -44,6 +50,11 @@ public class CliStorageManager {
             return null;
         }
         return objectMapper.readValue(targetFile.toFile(), clazz);
+    }
+
+    public boolean deleteData(String fileName) throws IOException {
+        Path targetFile = appStorageDir.resolve(fileName);
+        return Files.deleteIfExists(targetFile);
     }
 
     public Path getStorageDirectory() {

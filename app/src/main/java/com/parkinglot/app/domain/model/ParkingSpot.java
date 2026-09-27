@@ -1,5 +1,6 @@
 package com.parkinglot.app.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.parkinglot.app.domain.exception.AllocationNotFoundException;
 import com.parkinglot.app.domain.valueobject.AllocationId;
 import com.parkinglot.app.domain.valueobject.SpotId;
@@ -10,13 +11,16 @@ import java.util.Optional;
 
 public class ParkingSpot {
 
-    private final SpotId spotId;
+    private SpotId spotId;
 
-    private final SpotType spotType;
+    private SpotType spotType;
 
-    private final int totalCapacity;
+    private int totalCapacity;
 
-    private final Map<AllocationId, Allocation> allocations;
+    private Map<AllocationId, Allocation> allocations;
+
+    /* Required empty constructor for jackson */
+    public ParkingSpot() {}
 
     public ParkingSpot(SpotId spotId, SpotType spotType, int capacity, Map<AllocationId, Allocation> allocations) {
         this.spotId = spotId;
@@ -44,11 +48,11 @@ public class ParkingSpot {
     }
 
     public boolean canAccommodate(int newCapacity) {
-        return this.totalCapacity <= (remainingCapacity() + newCapacity);
+        return this.totalCapacity <= (occupiedCapacity() + newCapacity);
     }
 
     public boolean isFull() {
-        return totalCapacity == remainingCapacity();
+        return totalCapacity == occupiedCapacity();
     }
 
     public boolean isEmpty() {

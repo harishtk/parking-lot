@@ -20,6 +20,9 @@ public class Allocation {
 
     private int capacityConsumed;
 
+    /* Required empty constructor for jackson */
+    public Allocation() {}
+
     public Allocation(AllocationId allocationId,
                       RegistrationNumber registrationNumber,
                       VehicleType vehicleType,

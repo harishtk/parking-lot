@@ -3,23 +3,31 @@ package com.parkinglot.app.domain.model;
 import com.parkinglot.app.domain.valueobject.FloorId;
 import com.parkinglot.app.domain.valueobject.SpotId;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public class Floor {
 
-    private final FloorId floorId;
+    private FloorId floorId;
 
-    private final Map<SpotId, ParkingSpot> parkingSpots;
+    private Map<SpotId, ParkingSpot> parkingSpots;
+
+    /* Required empty constructor for jackson */
+    public Floor() {}
 
     public Floor(FloorId floorId, Map<SpotId, ParkingSpot> parkingSpots) {
         this.floorId = floorId;
         this.parkingSpots = parkingSpots;
     }
 
-    public Map<SpotId, ParkingSpot> spots() {
-        return parkingSpots;
+    public static Floor initialize(
+            FloorId floorId,
+            Map<SpotId, ParkingSpot> parkingSpots
+    ) {
+        return new Floor(floorId, parkingSpots);
+    }
+
+    public List<ParkingSpot> spots() {
+        return new ArrayList<>(parkingSpots.values());
     }
 
     public void addSpot(ParkingSpot parkingSpot) {
@@ -32,40 +40,5 @@ public class Floor {
 
     public FloorId id() {
         return floorId;
-    }
-
-    public static Floor create(
-            int floorNumber,
-            int carSpotsPerFloor,
-            int bikeSpotsPerFloor
-    ) {
-        Map<SpotId, ParkingSpot> spots = new HashMap<SpotId, ParkingSpot>();
-
-        // Car spots
-        for (int i = 1; i <= carSpotsPerFloor; i++ ) {
-
-            SpotId spotId = new SpotId("F%02d-C%02d".formatted(floorNumber, i));
-
-            spots.put(
-                    spotId,
-                    ParkingSpot.carSpot(spotId)
-            );
-        }
-
-        // Bike spots
-        for (int i = 1; i <= bikeSpotsPerFloor; i++ ) {
-
-            SpotId spotId = new SpotId("F%02d-B%02d".formatted(floorNumber, i));
-
-            spots.put(
-                    spotId,
-                    ParkingSpot.bikeSpot(spotId)
-            );
-        }
-
-        return new Floor(
-                new FloorId(String.valueOf(floorNumber)),
-                spots
-        );
     }
 }

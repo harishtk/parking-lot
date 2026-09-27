@@ -21,7 +21,7 @@ public class LocalParkingLotRepository implements ParkingLotRepository {
     @Override
     public Optional<ParkingLot> load() {
         try {
-            return Optional.of(storageManager.loadData(DATA_FILENAME, ParkingLot.class));
+            return Optional.ofNullable(storageManager.loadData(DATA_FILENAME, ParkingLot.class));
         } catch (IOException e) {
             e.printStackTrace();
             return Optional.empty();
@@ -32,6 +32,17 @@ public class LocalParkingLotRepository implements ParkingLotRepository {
     public boolean save(ParkingLot parkingLot) {
         try {
             storageManager.saveData(DATA_FILENAME, parkingLot);
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public boolean delete() {
+        try {
+            storageManager.deleteData(DATA_FILENAME);
             return true;
         } catch (IOException e) {
             e.printStackTrace();

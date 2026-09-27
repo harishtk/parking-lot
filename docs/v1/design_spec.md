@@ -246,7 +246,7 @@ Dependencies:
 * Clock
 * ID Generators
 ---
-### `ReservationService`
+### `DefaultReservationService`
 Responsibilites:
 * Create Reservation
 * Cancel Reservation
