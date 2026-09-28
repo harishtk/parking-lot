@@ -45,9 +45,6 @@ public class CliStorageManager {
 
     public <T> T loadData(String fileName, Class<T> clazz) throws IOException {
         Path targetFile = appStorageDir.resolve(fileName);
-        if (!Files.exists(targetFile)) {
-            return null;
-        }
         return objectMapper.readValue(targetFile.toFile(), clazz);
     }
 

@@ -6,6 +6,7 @@ import com.github.freva.asciitable.ColumnData;
 import com.google.inject.Inject;
 import com.parkinglot.app.application.exception.ParkingLotNotFoundException;
 import com.parkinglot.app.application.service.ParkingService;
+import com.parkinglot.app.cli.io.ParkingOutput;
 import com.parkinglot.app.domain.model.ParkingLot;
 import com.parkinglot.app.domain.model.ParkingLotMetaData;
 import com.parkinglot.app.domain.model.ParkingSpot;
@@ -45,25 +46,34 @@ public class ParkingStatusCommand implements Callable<Integer> {
 
     @Override
     public Integer call() throws Exception {
-        ParkingLot parkingLot = parkingService.getParkingLot()
-                .orElseThrow(ParkingLotNotFoundException::new);
+        ParkingLot parkingLot = parkingService.getParkingLot();
 
         ParkingLotMetaData metaData = parkingLot.describe();
 
         var out = spec.commandLine().getOut();
-        out.printf("  %14s %d%n", "Total Floors:", metaData.numFloors());
-        out.printf("  %14s %d%n", "Total Spots:", metaData.numSpots());
-        out.printf("  %14s %d%n", "Total Tickets:", metaData.numTickets());
-        out.printf("  %14s %d%n", "Total Reservations:", metaData.numReservations());
-        out.printf("  %14s %d%n", "Occupied Spots:", metaData.numOccupiedSpots());
+        ParkingOutput.heading(spec, "Parking lot");
+        ParkingOutput.detail(spec, "Floors", metaData.numFloors());
+        ParkingOutput.detail(spec, "Spots", metaData.numSpots());
+        ParkingOutput.detail(spec, "Occupied spots", metaData.numOccupiedSpots());
+        ParkingOutput.detail(spec, "Empty spots", metaData.numSpots() - metaData.numOccupiedSpots());
+        ParkingOutput.detail(spec, "Tickets", metaData.numTickets());
+        ParkingOutput.detail(spec, "Reservations", metaData.numReservations());
 
         if (showAllocations) {
-            List<ParkingSpot> spots = parkingLot.findCandidateSpots();
+            List<ParkingSpot> spots = parkingLot.findCandidateSpots().stream()
+                    .sorted(java.util.Comparator.comparing(spot -> spot.id().id()))
+                    .toList();
+            out.println();
+            ParkingOutput.heading(spec, "Spot availability");
+            if (spots.isEmpty()) {
+                out.println("  No spots to display.");
+                return 0;
+            }
 
             List<ColumnData<ParkingSpot>> columns = Arrays.asList(
                     new Column().header("Spot").with(spot -> spot.id().id()),
                     new Column().header("Type").with(spot -> spot.spotType().toString()),
-                    new Column().header("Used / Capacity").with(spot -> Integer.toString(spot.remainingCapacity())),
+                    new Column().header("Remaining capacity").with(spot -> Integer.toString(spot.remainingCapacity())),
                     new Column().header("Status").with(spot -> {
                         if (spot.isFull()) {
                             return "FULL";

@@ -7,12 +7,12 @@ import com.parkinglot.app.domain.valueobject.ReservationId;
 
 public interface ReservationService {
 
-    public Reservation reserve(
+    Reservation reserve(
             RegistrationNumber registrationNumber,
             VehicleType vehicleType
     );
 
-    public Reservation cancel(ReservationId reservationId);
+    Reservation cancel(ReservationId reservationId);
 
-    public Reservation getReservationById(ReservationId reservationId);
+    Reservation getReservationById(ReservationId reservationId);
 }

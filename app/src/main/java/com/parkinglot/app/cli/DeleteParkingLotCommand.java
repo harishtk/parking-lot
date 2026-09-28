@@ -1,9 +1,8 @@
 package com.parkinglot.app.cli;
 
 import com.google.inject.Inject;
+import com.parkinglot.app.application.service.ParkingService;
 import com.parkinglot.app.cli.io.ParkingOutput;
-import com.parkinglot.app.domain.repository.ParkingLotRepository;
-import com.parkinglot.app.infrastructure.persistence.local.CliStorageManager;
 import picocli.CommandLine;
 
 import java.util.concurrent.Callable;
@@ -11,7 +10,7 @@ import java.util.concurrent.Callable;
 @CommandLine.Command(
         name = "delete-lot",
         aliases = {"delete"},
-        description = "Deletes the current parking lot.",
+        description = "Delete the current parking lot.",
         mixinStandardHelpOptions = true,
         sortOptions = false,
         exitCodeOnInvalidInput = 2,
@@ -22,17 +21,17 @@ public class DeleteParkingLotCommand implements Callable<Integer> {
     @CommandLine.Spec
     private CommandLine.Model.CommandSpec spec;
 
-    private final ParkingLotRepository repository;
+    private final ParkingService parkingService;
 
     @Inject
-    public DeleteParkingLotCommand(CliStorageManager storageManager, ParkingLotRepository repository) {
-        this.repository = repository;
+    public DeleteParkingLotCommand(ParkingService parkingService) {
+        this.parkingService = parkingService;
     }
 
     @Override
     public Integer call() throws Exception {
-        if (repository.delete()) {
-            spec.commandLine().getOut().println(CommandLine.Help.Ansi.AUTO.string("@|bold,green Successfully deleted the parking lot.|@"));
+        if (parkingService.deleteParkingLot()) {
+            ParkingOutput.success(spec, "Parking lot deleted.");
             return 0;
         } else {
             ParkingOutput.printErr(

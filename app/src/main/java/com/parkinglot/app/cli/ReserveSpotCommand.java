@@ -3,6 +3,7 @@ package com.parkinglot.app.cli;
 import com.google.inject.Inject;
 import com.parkinglot.app.application.service.ReservationService;
 import com.parkinglot.app.cli.converter.RegistrationNumberConverter;
+import com.parkinglot.app.cli.io.ParkingOutput;
 import com.parkinglot.app.domain.model.Reservation;
 import com.parkinglot.app.domain.model.VehicleType;
 import com.parkinglot.app.domain.valueobject.RegistrationNumber;
@@ -14,7 +15,7 @@ import java.util.concurrent.Callable;
 
 @Command(
         name = "reserve",
-        description = "Reserves a spot for given vehicle registration number, not guaranteed",
+        description = "Reserve for a vehicle (availability not guaranteed).",
         mixinStandardHelpOptions = true,
         sortOptions = false,
         exitCodeOnInvalidInput = 2,
@@ -54,7 +55,10 @@ public class ReserveSpotCommand implements Callable<Integer> {
                         registrationNumber,
                         vehicleType
                 );
-        spec.commandLine().getOut().printf("Vehicle reserved: %s%n", reservation.id().value());
+        ParkingOutput.success(spec, "Reservation created.");
+        ParkingOutput.detail(spec, "Reservation", reservation.id().value());
+        ParkingOutput.detail(spec, "Registration", registrationNumber.value());
+        ParkingOutput.detail(spec, "Vehicle type", vehicleType);
 
         return 0;
     }

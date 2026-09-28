@@ -4,7 +4,7 @@ public record ParkingLotMetaData(
         int numFloors,
         int numSpots,
         int numTickets,
-        int numReservations,
+        long numReservations,
         long numOccupiedSpots
 ) {
     

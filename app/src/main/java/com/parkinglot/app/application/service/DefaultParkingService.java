@@ -5,6 +5,8 @@ import com.parkinglot.app.application.exception.ParkingLotNotFoundException;
 import com.parkinglot.app.application.exception.VehicleNotFoundException;
 import com.parkinglot.app.domain.ParkingLotFactory;
 import com.parkinglot.app.domain.exception.ParkingSpotUnavailableException;
+import com.parkinglot.app.domain.exception.ReservationAlreadyExistsException;
+import com.parkinglot.app.domain.exception.TicketAlreadyExistsException;
 import com.parkinglot.app.domain.model.*;
 import com.parkinglot.app.domain.policy.FeeCalculationStrategy;
 import com.parkinglot.app.domain.policy.SpotSelectionStrategy;
@@ -17,7 +19,6 @@ import com.parkinglot.app.infrastructure.idgenerator.AllocationIdGenerator;
 import com.parkinglot.app.infrastructure.idgenerator.SpotIdGenerator;
 import com.parkinglot.app.infrastructure.idgenerator.TicketIdGenerator;
 
-import java.math.BigDecimal;
 import java.time.Clock;
 import java.time.Instant;
 import java.util.List;
@@ -55,15 +56,20 @@ public class DefaultParkingService implements ParkingService {
     }
 
     @Override
-    public Optional<Ticket> parkVehicle(RegistrationNumber registrationNumber,
+    public Ticket parkVehicle(RegistrationNumber registrationNumber,
                                         VehicleType vehicleType) {
+
+        Optional<Ticket> existingTicket = findVehicle(registrationNumber);
+        if (existingTicket.isPresent()) {
+            throw new TicketAlreadyExistsException(existingTicket.get(), registrationNumber);
+        }
+
         String idInput = registrationNumber.value() + "-" + vehicleType.name();
         TicketId ticketId = ticketIdGenerator.next(idInput);
         AllocationId allocationId =  allocationIdGenerator.next(idInput);
         Instant entryTime = clock.instant();
 
-        ParkingLot parkingLot = parkingLotRepository.load()
-                .orElseThrow(ParkingLotNotFoundException::new);
+        ParkingLot parkingLot = getParkingLot();
 
         List<ParkingSpot> freeSpots = parkingLot.findCandidateSpots();
         List<Reservation> reservations = parkingLot.findActiveReservations();
@@ -86,14 +92,12 @@ public class DefaultParkingService implements ParkingService {
         );
 
         parkingLotRepository.save(parkingLot);
-
-        return Optional.of(ticket);
+        return ticket;
     }
 
     @Override
-    public Optional<Ticket> unparkVehicle(RegistrationNumber registrationNumber) {
-        ParkingLot parkingLot = parkingLotRepository.load()
-                .orElseThrow(ParkingLotNotFoundException::new);
+    public Ticket unparkVehicle(RegistrationNumber registrationNumber) {
+        ParkingLot parkingLot = getParkingLot();
         Instant exitTime = clock.instant();
 
         Ticket ticket = parkingLot.findVehicle(registrationNumber)
@@ -108,12 +112,11 @@ public class DefaultParkingService implements ParkingService {
         );
 
         parkingLotRepository.save(parkingLot);
-        return Optional.of(ticket);
+        return ticket;
     }
 
     @Override
     public void createParkingLot(int floors, int carSpotsPerFloor, int bikeSpotsPerFloor) {
-
         ParkingLot parkingLot =
                 factory.create(
                         floors,
@@ -126,18 +129,34 @@ public class DefaultParkingService implements ParkingService {
 
     @Override
     public Optional<Ticket> findTicket(TicketId ticketId) {
-        return parkingLotRepository.load()
-                .flatMap(lot -> lot.findActiveTicket(ticketId));
+        ParkingLot lot = getParkingLot();
+        return lot.findActiveTicket(ticketId);
     }
 
     @Override
     public Optional<Ticket> findVehicle(RegistrationNumber registrationNumber) {
-        return parkingLotRepository.load()
-                .flatMap(lot -> lot.findVehicle(registrationNumber));
+        ParkingLot lot = getParkingLot();
+        return lot.findVehicle(registrationNumber);
     }
 
     @Override
-    public Optional<ParkingLot> getParkingLot() {
-        return parkingLotRepository.load();
+    public List<Ticket> findAllTickets() {
+        return getParkingLot().findAllTickets();
+    }
+
+    @Override
+    public List<Ticket> findActiveTickets() {
+        return getParkingLot().findActiveTickets();
+    }
+
+    @Override
+    public ParkingLot getParkingLot() {
+        return parkingLotRepository.load()
+                .orElseThrow(ParkingLotNotFoundException::new);
+    }
+
+    @Override
+    public boolean deleteParkingLot() {
+        return parkingLotRepository.delete();
     }
 }

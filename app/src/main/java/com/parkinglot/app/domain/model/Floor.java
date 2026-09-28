@@ -26,6 +26,10 @@ public class Floor {
         return new Floor(floorId, parkingSpots);
     }
 
+    public void releaseSpot(SpotId spotId) {
+
+    }
+
     public List<ParkingSpot> spots() {
         return new ArrayList<>(parkingSpots.values());
     }

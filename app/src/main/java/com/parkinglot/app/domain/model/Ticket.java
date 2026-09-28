@@ -5,6 +5,7 @@ import com.parkinglot.app.domain.valueobject.RegistrationNumber;
 import com.parkinglot.app.domain.valueobject.SpotId;
 import com.parkinglot.app.domain.valueobject.TicketId;
 
+import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.Instant;
 
@@ -41,6 +42,17 @@ public class Ticket {
         this.entryTime = entryTime;
     }
 
+    private Ticket(TicketId ticketId, RegistrationNumber registrationNumber, VehicleType vehicleType, SpotId spotId, Instant entryTime, Instant exitTime, Money fee, TicketStatus status) {
+        this.ticketId = ticketId;
+        this.registrationNumber = registrationNumber;
+        this.vehicleType = vehicleType;
+        this.spotId = spotId;
+        this.entryTime = entryTime;
+        this.exitTime = exitTime;
+        this.fee = fee;
+        this.status = status;
+    }
+
     public Ticket close(Instant exitTime, Money fee) {
         if (this.status == TicketStatus.CLOSED) {
             return this;
@@ -48,6 +60,7 @@ public class Ticket {
 
         this.exitTime = exitTime;
         this.fee = fee;
+        this.status = TicketStatus.CLOSED;
         return this;
     }
 
@@ -94,6 +107,45 @@ public class Ticket {
                 ", fee=" + fee +
                 ", status=" + status +
                 '}';
+    }
+
+    public record Snapshot(
+            String ticketId,
+            String registrationNumber,
+            String vehicleType,
+            String spotId,
+            String entryTime,
+            String exitTime,
+            String fee,
+            String status
+    ) {
+
+    }
+
+    public Snapshot toSnapshot() {
+        return new Snapshot(
+                ticketId.value(),
+                registrationNumber.value(),
+                vehicleType.name(),
+                spotId.id(),
+                entryTime.toString(),
+                exitTime == null ? "" : exitTime.toString(),
+                fee == null ? "0.0" : fee.toString(),
+                status.name()
+        );
+    }
+
+    public Ticket restoreFromSnapshot(Snapshot snapshot) {
+        return new Ticket(
+                new TicketId(snapshot.ticketId),
+                new RegistrationNumber(snapshot.registrationNumber),
+                VehicleType.valueOf(snapshot.vehicleType),
+                new SpotId(snapshot.spotId),
+                Instant.parse(snapshot.entryTime),
+                Instant.parse(snapshot.exitTime),
+                new Money(BigDecimal.valueOf(Double.parseDouble(snapshot.fee))),
+                TicketStatus.valueOf(snapshot.status)
+        );
     }
 }
 

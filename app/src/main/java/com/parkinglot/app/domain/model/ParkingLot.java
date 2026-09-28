@@ -1,6 +1,7 @@
 package com.parkinglot.app.domain.model;
 
 import com.parkinglot.app.domain.exception.ParkingSpotNotFoundException;
+import com.parkinglot.app.domain.exception.ReservationAlreadyExistsException;
 import com.parkinglot.app.domain.exception.ReservationNotFoundException;
 import com.parkinglot.app.domain.exception.TicketNotFoundException;
 import com.parkinglot.app.domain.valueobject.*;
@@ -94,7 +95,10 @@ public final class ParkingLot {
         ParkingSpot spot = findSpot(ticket.spotId());
         spot.release(ticketId);
 
-        return ticket.close(time, fee);
+        Ticket closedTicket = ticket.close(time, fee);
+
+        tickets.put(ticketId, closedTicket);
+        return closedTicket;
     }
 
     public Reservation createReservation(
@@ -102,6 +106,10 @@ public final class ParkingLot {
             RegistrationNumber registrationNumber,
             VehicleType vehicleType
     ) {
+        if (findReservationForRegistration(registrationNumber).isPresent()) {
+            throw new ReservationAlreadyExistsException(registrationNumber);
+        }
+
         final Reservation reservation = new Reservation(
                 reservationId,
                 registrationNumber,
@@ -122,6 +130,12 @@ public final class ParkingLot {
         reservations.put(reservationId, cancelled);
 
         return cancelled;
+    }
+
+    public Optional<Reservation> findReservationForRegistration(RegistrationNumber registrationNumber) {
+        return reservations.values()
+                .stream().filter(reservation -> reservation.isActive() && reservation.belongsTo(registrationNumber))
+                .findFirst();
     }
 
     public Reservation findReservation(ReservationId reservationId) {
@@ -159,7 +173,9 @@ public final class ParkingLot {
     }
 
     public Optional<Ticket> findActiveTicket(TicketId ticketId) {
-        return Optional.ofNullable(tickets.get(ticketId));
+        return tickets.values().stream()
+                .filter(ticket -> ticket.isActive() && ticket.id().equals(ticketId))
+                .findFirst();
     }
 
     public Optional<Ticket> findVehicle(RegistrationNumber registrationNumber) {
@@ -167,11 +183,24 @@ public final class ParkingLot {
                 .flatMap(this::findActiveTicket);
     }
 
+    public List<Ticket> findAllTickets() {
+        return tickets.values().stream().toList();
+    }
+
+    public List<Ticket> findActiveTickets() {
+        return tickets.values().stream()
+                .filter(Ticket::isActive)
+                .toList();
+    }
+
     public ParkingLotMetaData describe() {
         int numFloors = floors.size();
         int numSpots = findCandidateSpots().size();
         int numTickets = tickets.size();
-        int numReservations = reservations.size();
+        long numReservations = reservations.values()
+                .stream()
+                .filter(Reservation::isActive)
+                .count();
         long numOccupiedSpots = Math.toIntExact(floors.values().stream()
                 .map(Floor::spots)
                 .flatMap(List::stream)

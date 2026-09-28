@@ -17,7 +17,7 @@ import java.util.concurrent.Callable;
 
 @Command(
         name = "unpark",
-        description = "Unparks a vehicle",
+        description = "Release a parked vehicle.",
         mixinStandardHelpOptions = true,
         sortOptions = false,
         exitCodeOnInvalidInput = 2,
@@ -46,15 +46,12 @@ public class UnparkVehicleCommand implements Callable<Integer> {
 
     @Override
     public Integer call() throws Exception {
-        Optional<Ticket> ticket = parkingService.unparkVehicle(registrationNumber);
-        if (ticket.isPresent()) {
-            spec.commandLine().getOut().println(CommandLine.Help.Ansi.AUTO.string("@|bold,green Vehicle released successfully|@"));
-            ParkingOutput.printTicket(spec, ticket.get());
-            return 0;
-        } else {
-            String message = "ERROR FAILED: Unable to release vehicle: " + registrationNumber.value();
-            ParkingOutput.printErr(spec, message);
-            return 1;
-        }
+        Ticket ticket = parkingService.unparkVehicle(registrationNumber);
+
+        ParkingOutput.success(spec, "Vehicle released.");
+        ParkingOutput.detail(spec, "Registration", registrationNumber.value());
+        ParkingOutput.printTicket(spec, ticket);
+
+        return 0;
     }
 }

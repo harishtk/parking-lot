@@ -2,6 +2,7 @@ package com.parkinglot.app.cli;
 
 import com.google.inject.Inject;
 import com.parkinglot.app.application.service.ParkingService;
+import com.parkinglot.app.cli.io.ParkingOutput;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
@@ -10,7 +11,7 @@ import java.util.concurrent.Callable;
 
 @Command(
         name = "create-lot",
-        description = "Creates a parking lot",
+        description = "Create a parking lot.",
         mixinStandardHelpOptions = true,
         sortOptions = false,
         exitCodeOnInvalidInput = 2,
@@ -66,7 +67,10 @@ public class CreateParkingLotCommand implements Callable<Integer> {
                 bikeSpotsPerFloor
         );
 
-        System.out.println("Parking Lot Created");
+        ParkingOutput.success(spec, "Parking lot created.");
+        ParkingOutput.detail(spec, "Floors", numFloors);
+        ParkingOutput.detail(spec, "Car spots / floor", carSpotsPerFloor);
+        ParkingOutput.detail(spec, "Bike spots / floor", bikeSpotsPerFloor);
 
         return 0;
     }

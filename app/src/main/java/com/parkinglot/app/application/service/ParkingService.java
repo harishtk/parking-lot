@@ -6,16 +6,17 @@ import com.parkinglot.app.domain.model.VehicleType;
 import com.parkinglot.app.domain.valueobject.RegistrationNumber;
 import com.parkinglot.app.domain.valueobject.TicketId;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface ParkingService {
 
-    Optional<Ticket> parkVehicle(
+    Ticket parkVehicle(
             RegistrationNumber registrationNumber,
             VehicleType vehicleType
     );
 
-    Optional<Ticket> unparkVehicle(
+    Ticket unparkVehicle(
             RegistrationNumber registrationNumber
     );
 
@@ -29,5 +30,11 @@ public interface ParkingService {
 
     Optional<Ticket> findVehicle(RegistrationNumber registrationNumber);
 
-    Optional<ParkingLot> getParkingLot();
+    List<Ticket> findActiveTickets();
+
+    List<Ticket> findAllTickets();
+
+    ParkingLot getParkingLot();
+
+    boolean deleteParkingLot();
 }

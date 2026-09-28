@@ -14,7 +14,7 @@ import java.util.concurrent.Callable;
 @Command(
         name = "find-vehicle",
         aliases = {"find"},
-        description = "Find vehicle",
+        description = "Find a parked vehicle.",
         mixinStandardHelpOptions = true,
         sortOptions = false,
         exitCodeOnInvalidInput = 2,
@@ -42,14 +42,14 @@ public class FindVehicleCommand implements Callable<Integer> {
 
     @Override
     public Integer call() throws Exception {
-        var out = spec.commandLine().getOut();
         parkingService.findVehicle(registrationNumber)
                 .ifPresentOrElse(ticket -> {
-                            out.println(CommandLine.Help.Ansi.AUTO.string("@|bold,green Vehicle parked successfully|@"));
+                            ParkingOutput.success(spec, "Vehicle found.");
+                            ParkingOutput.detail(spec, "Registration", registrationNumber.value());
                             ParkingOutput.printTicket(spec, ticket);
                         },
                         () -> {
-                            String message = "ERROR VEHICLE_NOT_FOUND: Vehicle not found for registration: " + registrationNumber.value();
+                            String message = "No parked vehicle found for " + registrationNumber.value() + ".";
                             ParkingOutput.printErr(spec, message);
                         }
                 );

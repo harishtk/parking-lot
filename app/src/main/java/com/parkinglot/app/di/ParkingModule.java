@@ -20,7 +20,7 @@ public class ParkingModule extends AbstractModule {
 
         bind(SpotSelectionStrategy.class).to(NaiveSpotSelectionStrategy.class);
 
-        bind(ParkingLotRepository.class).to(LocalParkingLotRepository.class);
+        bind(ParkingLotRepository.class).to(LocalParkingLotRepository.class).in(Singleton.class);
     }
 
     @Provides

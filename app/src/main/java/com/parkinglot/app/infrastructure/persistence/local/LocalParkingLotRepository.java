@@ -3,6 +3,7 @@ package com.parkinglot.app.infrastructure.persistence.local;
 import com.google.inject.Inject;
 import com.parkinglot.app.domain.model.ParkingLot;
 import com.parkinglot.app.domain.repository.ParkingLotRepository;
+import com.parkinglot.app.domain.repository.ParkingLotRepositoryException;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -23,30 +24,28 @@ public class LocalParkingLotRepository implements ParkingLotRepository {
         try {
             return Optional.ofNullable(storageManager.loadData(DATA_FILENAME, ParkingLot.class));
         } catch (IOException e) {
-            e.printStackTrace();
-            return Optional.empty();
+            throw new ParkingLotRepositoryException(
+                    "Unable to load the parking lot.", e);
         }
     }
 
     @Override
-    public boolean save(ParkingLot parkingLot) {
+    public void save(ParkingLot parkingLot) {
         try {
             storageManager.saveData(DATA_FILENAME, parkingLot);
-            return true;
         } catch (IOException e) {
-            e.printStackTrace();
-            return false;
+            throw new ParkingLotRepositoryException(
+                    "Unable to save the parking lot.", e);
         }
     }
 
     @Override
     public boolean delete() {
         try {
-            storageManager.deleteData(DATA_FILENAME);
-            return true;
+            return storageManager.deleteData(DATA_FILENAME);
         } catch (IOException e) {
-            e.printStackTrace();
-            return false;
+            throw new ParkingLotRepositoryException(
+                    "Unable to delete the parking lot.", e);
         }
     }
 }

@@ -18,13 +18,18 @@ import picocli.CommandLine.Model.CommandSpec;
         mixinStandardHelpOptions = true,
         version = "parking 1.0",
         synopsisSubcommandLabel = "COMMAND",
-        commandListHeading = "%ncommands:%n",
-        optionListHeading = "%noptions:%n",
-        footer = "%nRun 'parking help COMMAND' for command details.",
+        header = "@|bold,cyan PARKING|@  Parking lot manager%n",
+        commandListHeading = "%n@|bold Commands:|@%n",
+        optionListHeading = "%n@|bold Options:|@%n",
+        footer = {"%n@|bold Examples:|@",
+                "  parking create-lot --floors 2",
+                "  parking park --registration KA05AB1234 --type CAR",
+                "  parking status --show-allocations",
+                "%nRun 'parking COMMAND --help' for command details."},
         exitCodeListHeading = "%nExit codes:%n",
         exitCodeList = {
                 "0:Successful operation or help",
-                "1:Internal or Storage failure",
+                "1:Internal or storage failure",
                 "2:Invalid command or input",
                 "3:Operation rejected by a business rule"
         },
@@ -35,7 +40,8 @@ import picocli.CommandLine.Model.CommandSpec;
                 ParkVehicleCommand.class,
                 UnparkVehicleCommand.class,
                 DeleteParkingLotCommand.class,
-                ParkingStatusCommand.class
+                ParkingStatusCommand.class,
+                TicketsCommand.class
         }
 )
 public class ParkingCliApp implements Runnable {

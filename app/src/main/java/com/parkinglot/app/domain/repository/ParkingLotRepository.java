@@ -8,7 +8,7 @@ public interface ParkingLotRepository {
 
     Optional<ParkingLot> load();
 
-    boolean save(ParkingLot parkingLot);
+    void save(ParkingLot parkingLot);
 
     boolean delete();
 }

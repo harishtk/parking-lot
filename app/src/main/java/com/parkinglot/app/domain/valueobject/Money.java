@@ -18,4 +18,9 @@ public record Money(@JsonValue BigDecimal amount) implements Serializable {
             throw new IllegalArgumentException("amount cannot be negative.");
         }
     }
+
+    @Override
+    public String toString() {
+        return amount.toString();
+    }
 }

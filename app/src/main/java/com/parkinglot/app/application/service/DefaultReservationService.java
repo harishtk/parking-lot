@@ -1,6 +1,7 @@
 package com.parkinglot.app.application.service;
 
 import com.google.inject.Inject;
+import com.parkinglot.app.application.exception.ParkingLotNotFoundException;
 import com.parkinglot.app.domain.model.ParkingLot;
 import com.parkinglot.app.domain.model.Reservation;
 import com.parkinglot.app.domain.model.VehicleType;
@@ -28,9 +29,7 @@ public class DefaultReservationService implements ReservationService {
             RegistrationNumber registrationNumber,
             VehicleType vehicleType
     ) {
-        ParkingLot parkingLot = parkingLotRepository.load()
-                .orElseThrow(() -> new RuntimeException("Unable to load parking lot"));
-
+        ParkingLot parkingLot = getParkingLot();
         Reservation reservation = parkingLot.createReservation(
                 idGenerator.next(registrationNumber.value()),
                 registrationNumber,
@@ -42,14 +41,19 @@ public class DefaultReservationService implements ReservationService {
     }
 
     public Reservation cancel(ReservationId reservationId) {
-        ParkingLot parkingLot = parkingLotRepository.load()
-                .orElseThrow(() -> new RuntimeException("Unable to load parking lot"));
-        return parkingLot.cancelReservation(reservationId);
+        ParkingLot parkingLot = getParkingLot();
+        Reservation reservation = parkingLot.cancelReservation(reservationId);
+        parkingLotRepository.save(parkingLot);
+        return reservation;
     }
 
     public Reservation getReservationById(ReservationId reservationId) {
-        ParkingLot parkingLot = parkingLotRepository.load()
-                .orElseThrow(() -> new RuntimeException("Unable to load parking lot"));
+        ParkingLot parkingLot = getParkingLot();
         return parkingLot.findReservation(reservationId);
+    }
+
+    private ParkingLot getParkingLot() {
+        return parkingLotRepository.load()
+                .orElseThrow(ParkingLotNotFoundException::new);
     }
 }

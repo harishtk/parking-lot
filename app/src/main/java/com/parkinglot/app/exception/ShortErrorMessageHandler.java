@@ -1,6 +1,7 @@
 package com.parkinglot.app.exception;
 
 import picocli.CommandLine;
+import com.parkinglot.app.cli.io.ParkingOutput;
 
 import java.io.PrintWriter;
 
@@ -15,9 +16,9 @@ public class ShortErrorMessageHandler implements CommandLine.IParameterException
             err.println(cmd.getColorScheme().stackTraceText(ex));
         }
 
-        err.println(cmd.getColorScheme().errorText(ex.getMessage())); // bold red
+        ParkingOutput.printErr(cmd.getCommandSpec(), ex.getMessage());
         CommandLine.UnmatchedArgumentException.printSuggestions(ex, err);
-        err.print(cmd.getHelp().fullSynopsis());
+        err.println();
 
         CommandLine.Model.CommandSpec spec = cmd.getCommandSpec();
         err.printf("Try '%s --help' for more information.%n", spec.qualifiedName());

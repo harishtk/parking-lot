@@ -53,17 +53,14 @@ public class ParkVehicleCommand implements Callable<Integer> {
 
     @Override
     public Integer call() throws Exception {
-        Optional<Ticket> ticket = parkingService.parkVehicle(
+        Ticket ticket = parkingService.parkVehicle(
                 registrationNumber,
                 vehicleType
         );
-        if (ticket.isPresent()) {
-            spec.commandLine().getOut().println(CommandLine.Help.Ansi.AUTO.string("@|bold,green Vehicle parked successfully|@"));
-            ParkingOutput.printTicket(spec, ticket.get());
-        } else {
-            String message = "ERROR NO_SUITABLE_SPOT: No spot is available for a " + vehicleType.name();
-            ParkingOutput.printErr(spec, message);
-        }
+
+        ParkingOutput.success(spec, "Vehicle parked.");
+        ParkingOutput.detail(spec, "Registration", registrationNumber.value());
+        ParkingOutput.printTicket(spec, ticket);
 
         return 0;
     }

@@ -1,5 +1,6 @@
 package com.parkinglot.app.domain.exception;
 
+import com.parkinglot.app.domain.valueobject.RegistrationNumber;
 import com.parkinglot.app.domain.valueobject.ReservationId;
 
 public class ReservationNotFoundException extends RuntimeException {
@@ -7,3 +8,4 @@ public class ReservationNotFoundException extends RuntimeException {
         super("Reservation with value " + reservationId + " not found");
     }
 }
+

@@ -47,7 +47,7 @@ public class ParkingSpot {
     }
 
     public boolean canAccommodate(int newCapacity) {
-        return this.totalCapacity <= (occupiedCapacity() + newCapacity);
+        return remainingCapacity() >= newCapacity;
     }
 
     public boolean isFull() {
@@ -95,7 +95,7 @@ public class ParkingSpot {
         return new ParkingSpot(
                 spotId,
                 SpotType.CAR,
-                1,
+                SpotType.CAR.getUnitSize(),
                 Map.of()
         );
     }
@@ -106,7 +106,7 @@ public class ParkingSpot {
         return new ParkingSpot(
                 spotId,
                 SpotType.BIKE,
-                1,
+                SpotType.BIKE.getUnitSize(),
                 Map.of()
         );
     }
