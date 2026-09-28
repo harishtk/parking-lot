@@ -1,0 +1,270 @@
+[
+  {
+    "name": "java.lang.Integer",
+    "methods": [{ "name": "parseInt", "parameterTypes": ["java.lang.String"] }]
+  },
+  {
+    "name": "java.lang.Long",
+    "methods": [{ "name": "parseLong", "parameterTypes": ["java.lang.String"] }]
+  },
+  {
+    "name": "java.lang.Boolean",
+    "methods": [{ "name": "parseBoolean", "parameterTypes": ["java.lang.String"] }]
+  },
+  {
+    "name": "java.lang.Byte",
+    "methods": [{ "name": "parseByte", "parameterTypes": ["java.lang.String"] }]
+  },
+  {
+    "name": "java.lang.Short",
+    "methods": [{ "name": "parseShort", "parameterTypes": ["java.lang.String"] }]
+  },
+  {
+    "name": "java.lang.Float",
+    "methods": [{ "name": "parseFloat", "parameterTypes": ["java.lang.String"] }]
+  },
+  {
+    "name": "java.lang.Double",
+    "methods": [{ "name": "parseDouble", "parameterTypes": ["java.lang.String"] }]
+  },
+  {
+    "name": "com.parkinglot.app.ParkingCliApp",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "com.parkinglot.app.application.di.ApplicationModule",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "com.parkinglot.app.application.factory.DefaultParkingLotFactory",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "com.parkinglot.app.application.service.DefaultParkingService",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "com.parkinglot.app.application.service.DefaultReservationService",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "com.parkinglot.app.cli.CreateParkingLotCommand",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "com.parkinglot.app.cli.DeleteParkingLotCommand",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "com.parkinglot.app.cli.FindVehicleCommand",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "com.parkinglot.app.cli.ParkingStatusCommand",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "com.parkinglot.app.cli.ParkVehicleCommand",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "com.parkinglot.app.cli.ReserveSpotCommand",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "com.parkinglot.app.cli.UnparkVehicleCommand",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "com.parkinglot.app.cli.converter.RegistrationNumberConverter",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "com.parkinglot.app.di.ParkingModule",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "com.parkinglot.app.domain.model.Allocation",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "com.parkinglot.app.domain.model.Floor",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "com.parkinglot.app.domain.model.ParkingLot",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "com.parkinglot.app.domain.model.ParkingSpot",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "com.parkinglot.app.domain.model.Reservation",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "com.parkinglot.app.domain.model.ReservationStatus",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "com.parkinglot.app.domain.model.SpotType",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "com.parkinglot.app.domain.model.Ticket",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "com.parkinglot.app.domain.model.TicketStatus",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "com.parkinglot.app.domain.model.VehicleType",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "com.parkinglot.app.domain.policy.FeeCalculationStrategy",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "com.parkinglot.app.domain.policy.NaiveSpotSelectionStrategy",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "com.parkinglot.app.domain.valueobject.AllocationId",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "com.parkinglot.app.domain.valueobject.FloorId",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "com.parkinglot.app.domain.valueobject.Money",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "com.parkinglot.app.domain.valueobject.RegistrationNumber",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "com.parkinglot.app.domain.valueobject.ReservationId",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "com.parkinglot.app.domain.valueobject.SpotId",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "com.parkinglot.app.domain.valueobject.TicketId",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "com.parkinglot.app.infrastructure.config.ClockProvider",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "com.parkinglot.app.infrastructure.idgenerator.AllocationIdGenerator",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "com.parkinglot.app.infrastructure.idgenerator.ReservationIdGenerator",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "com.parkinglot.app.infrastructure.idgenerator.SpotIdGenerator",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "com.parkinglot.app.infrastructure.idgenerator.TicketIdGenerator",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "com.parkinglot.app.infrastructure.persistence.local.CliStorageManager",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "com.parkinglot.app.infrastructure.persistence.local.LocalParkingLotRepository",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true
+  }
+]

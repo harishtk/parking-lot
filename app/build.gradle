@@ -2,6 +2,7 @@
 plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     id 'application'
+    id 'org.graalvm.buildtools.native' version '1.1.14'
 }
 
 group = "com.parkinglot.app"
@@ -19,8 +20,7 @@ dependencies {
     implementation(libs.guice)
     implementation(libs.jackson)
     implementation(libs.jackson.jsr310)
-
-    implementation("com.github.freva:ascii-table:1.13.0")
+    implementation(libs.freva)
 
     implementation(libs.picocli)
     annotationProcessor(libs.picocli.codegen)
@@ -41,6 +41,23 @@ java {
 application {
     // Define the main class for the application.
     mainClass = 'com.parkinglot.app.ParkingCliApp'
+}
+
+graalvmNative {
+    // Use GRAALVM_HOME (or JAVA_HOME), independently of the Java compilation toolchain.
+    toolchainDetection = false
+    metadataRepository {
+        enabled = true
+    }
+    binaries {
+        main {
+            imageName = 'parking'
+            mainClass = application.mainClass
+            fallback = false
+            // Guice must use reflection instead of generating classes at runtime.
+            buildArgs.add('-Dguice_bytecode_gen_option=DISABLED')
+        }
+    }
 }
 
 tasks.named('test') {

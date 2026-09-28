@@ -49,6 +49,10 @@ public class ParkingCliApp implements Runnable {
     }
 
     public static void main(String[] args) {
+        // Guice reads this flag when its internals initialize in the native executable.
+        if (System.getProperty("org.graalvm.nativeimage.imagecode") != null) {
+            System.setProperty("guice_bytecode_gen_option", "DISABLED");
+        }
         Injector injector = Guice.createInjector(
                 new ParkingModule(),
                 new ApplicationModule()
