@@ -48,5 +48,33 @@ public class Allocation {
     public int consumesCapacity() {
         return capacityConsumed;
     }
+
+    public record Snapshot(
+            AllocationId allocationId,
+            RegistrationNumber registrationNumber,
+            VehicleType vehicleType,
+            TicketId ticketId,
+            Instant allocatedAt
+    ) {}
+
+    public Snapshot toSnapshot() {
+        return new Snapshot(
+                allocationId,
+                registrationNumber,
+                vehicleType,
+                ticketId,
+                allocatedAt
+        );
+    }
+
+    public Allocation restoreFromSnapshot(Snapshot snapshot) {
+        return new Allocation(
+                snapshot.allocationId,
+                snapshot.registrationNumber,
+                snapshot.vehicleType,
+                snapshot.ticketId,
+                snapshot.allocatedAt
+        );
+    }
 }
 

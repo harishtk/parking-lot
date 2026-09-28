@@ -22,10 +22,8 @@ public class CliStorageManager {
         this.objectMapper = new ObjectMapper()
                 .findAndRegisterModules()
                 .enable(SerializationFeature.INDENT_OUTPUT)
+                .setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.NONE)
                 .setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY)
-                .setVisibility(PropertyAccessor.GETTER, JsonAutoDetect.Visibility.NONE)
-                .setVisibility(PropertyAccessor.IS_GETTER, JsonAutoDetect.Visibility.NONE)
-                .setVisibility(PropertyAccessor.SETTER, JsonAutoDetect.Visibility.NONE)
                 .configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, false);
     }
 
@@ -42,6 +40,7 @@ public class CliStorageManager {
     public void saveData(String fileName, Object jsonObject) throws IOException {
         Path targetFile = appStorageDir.resolve(fileName);
         objectMapper.writeValue(targetFile.toFile(), jsonObject);
+        System.out.println("Saved data to: file:///" + targetFile.toAbsolutePath().toString());
     }
 
     public <T> T loadData(String fileName, Class<T> clazz) throws IOException {
