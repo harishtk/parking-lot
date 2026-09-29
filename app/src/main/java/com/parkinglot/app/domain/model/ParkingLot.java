@@ -22,17 +22,21 @@ public final class ParkingLot {
 
     private Map<RegistrationNumber, TicketId> vehicleTicketIndex;
 
+    private Map<TicketId, AllocationId> ticketAllocationIndex;
+
     /* Required empty constructor for jackson */
     public ParkingLot() {}
 
     public ParkingLot(Map<FloorId, Floor> floors,
                       Map<TicketId, Ticket> tickets,
                       Map<ReservationId, Reservation> reservations,
-                      Map<RegistrationNumber, TicketId> vehicleTicketIndex) {
+                      Map<RegistrationNumber, TicketId> vehicleTicketIndex,
+                      Map<TicketId, AllocationId> ticketAllocationIndex) {
         this.floors = floors;
         this.tickets = tickets;
         this.reservations = reservations;
         this.vehicleTicketIndex = vehicleTicketIndex;
+        this.ticketAllocationIndex = ticketAllocationIndex;
     }
 
     public static ParkingLot initialize(Map<FloorId, Floor> floors) {
@@ -40,7 +44,7 @@ public final class ParkingLot {
     }
 
     public ParkingLot(Map<FloorId, Floor> floors) {
-        this(floors, new HashMap<>(), new HashMap<>(), new HashMap<>());
+        this(floors, new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>());
     }
 
     public Ticket allocate(
@@ -72,6 +76,7 @@ public final class ParkingLot {
 
         tickets.put(ticketId, newTicket);
         vehicleTicketIndex.put(registrationNumber, ticketId);
+        ticketAllocationIndex.put(ticketId, allocationId);
 
         reservations.values()
                 .stream()
@@ -93,7 +98,9 @@ public final class ParkingLot {
                 .orElseThrow(() -> new TicketNotFoundException(ticketId));
 
         ParkingSpot spot = findSpot(ticket.spotId());
-        spot.release(ticketId);
+        AllocationId allocationId = ticketAllocationIndex.get(ticketId);
+        spot.release(allocationId);
+        ticketAllocationIndex.remove(ticketId);
 
         Ticket closedTicket = ticket.close(time, fee);
 

@@ -42,6 +42,11 @@ public class ParkingSpot {
         return allocation;
     }
 
+    public void release(AllocationId allocationId) {
+        Optional.ofNullable(allocations.remove(allocationId))
+                .orElseThrow(() -> new AllocationNotFoundException(allocationId));
+    }
+
     public int remainingCapacity() {
         return totalCapacity - occupiedCapacity();
     }
